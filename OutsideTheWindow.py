@@ -74,8 +74,8 @@ start_button_click_count = 0
 def motion_tracker(event):
     global start_button_movement_count
     """Updates the label text with the current mouse position."""
-    x, y = event.x, event.y
     if start_button_movement_count < len(start_button_coords[0]):
+        x, y = event.x, event.y
         if abs(((screen_width / 2) + start_button_coords[0][start_button_movement_count]) - x) <= start_button_radius + 1 and abs(((screen_height / 2) - start_button_coords[1][start_button_movement_count]) - y) <= start_button_radius + 1:
             if start_button_movement_count + 1 < len(start_button_coords[0]):
                 start_button_movement_count += 1
@@ -155,16 +155,33 @@ def create_code_popup(on_screen_text):
 
 def start_game():
     screen.clear()
-    trtl.title("Outside The Window")
+    start_phase_one()
 
 
 
+def start_phase_one():
+    def found_it(event):
+        trtl.title("You Found It!!")
+    screen._root.bind('<FocusIn>', found_it)
+    trtl.title("Click The Button")
+    screen.bgcolor("#ffffff")
+    popup_x = screen._root.winfo_x() + (screen._root.winfo_width()) - 885
+    popup_y = screen._root.winfo_y() + (screen._root.winfo_height()) - 665
+    newX = screen._root.winfo_x()
+    newY = screen._root.winfo_y()
+    screen._root.geometry(f"+{newX}+{newY}")
+    second_screen = tk.Toplevel(screen._root)
+    second_screen.geometry(f"+{popup_x}+{popup_y}")
+    second_screen.geometry("887x695")
+    second_screen.resizable(False, False)
+    second_screen.configure(bg="#d0d0d0")
+    second_screen.overrideredirect(True)
+    fake_button = tk.Button(second_screen, text="Click Me", command=lambda:trtl.title("Wrong Button"),width=10, height=3)
+    fake_button.place(x=450,y=350)
+    real_button = tk.Button(screen._root, text="Totally Real \nButton", command=lambda:trtl.title("Nice Job"),width=20, height=5)
+    real_button.place(x=450,y=350)
 
 
-
-
-
-        
 
 
 
